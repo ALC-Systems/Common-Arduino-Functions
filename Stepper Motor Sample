@@ -1,0 +1,60 @@
+
+// PUL, DIR, ENA positive to 5v vcc
+
+int NumRev = 3;
+int NumStep = 6400;           // how many steps per rev
+int PUL = 7;                  //define Pulse pin
+int DIR = 6;                  //define Direction pin
+int ENA = 5;                  //define Enable Pin
+
+int RevCount = 0;
+int StepCount = 0;
+
+void setup() {
+  pinMode (PUL, OUTPUT);
+  pinMode (DIR, OUTPUT);
+  pinMode (ENA, OUTPUT);
+  Serial.begin(9600);
+  Serial.println("Loop start");
+
+}
+
+void loop() {
+
+  for (int j = 0; j < NumRev; j++)
+  {
+    for (int i = 0; i < NumStep; i++)            //Forward
+    {
+      digitalWrite(DIR, LOW);
+      digitalWrite(ENA, HIGH);
+      digitalWrite(PUL, HIGH);
+      delayMicroseconds(50);
+      digitalWrite(PUL, LOW);
+      delayMicroseconds(50);
+      StepCount++;
+    }
+    RevCount ++;
+    delay(1000);
+    Serial.print("Rev # ");
+    Serial.print(RevCount);
+    Serial.print("complete; Steps counted: ");
+    Serial.println(StepCount);
+  }
+
+
+
+  for (int i = 0; i < NumStep; i++)             //Backward
+  {
+    digitalWrite(DIR, HIGH);
+    digitalWrite(ENA, HIGH);
+    digitalWrite(PUL, HIGH);
+    delayMicroseconds(50);
+    digitalWrite(PUL, LOW);
+    delayMicroseconds(50);
+  }
+
+  delay(1000);
+  StepCount = 0;
+  RevCount = 0;
+}
+
